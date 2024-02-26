@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from models import storage
 
 class BaseModel:
     """BaseModel class"""
@@ -23,6 +24,7 @@ class BaseModel:
     def save(self):
         """Update the updated_at attribute"""
         self.updated_at = datetime.now()
+        storage.save()
     
     def to_dict(self):
         """Returns a dictionary representation of the object"""
