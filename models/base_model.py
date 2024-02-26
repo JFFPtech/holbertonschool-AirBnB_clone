@@ -14,7 +14,7 @@ class BaseModel:
         self.updated_at = datetime.now()
 
     def to_dict(self):
-        dict_obj = dict(self.__dict__)
+        dict_obj = self.__dict__.copy()
         dict_obj['__class__'] = type(self).__name__
         dict_obj['created_at'] = self.created_at.isoformat()
         dict_obj['updated_at'] = self.updated_at.isoformat()
