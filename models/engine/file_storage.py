@@ -20,13 +20,15 @@ class FileStorage:
 
     def reload(self):
         try:
-            with open(FileStorage.__file_path, 'r') as file:
-                data = json.load(file)
+            with open(FileStorage.__file_path, 'r') as f:
+                data = json.load(f)
                 for key, value in data.items():
                     class_name, obj_id = key.split('.')
-                    module = __import__("models.{}".format(class_name), fromlist=[class_name])
-                    class_ = getattr(module, class_name)
-                    obj = class_(**value)
+                    if class_name == "BaseModel":
+                        from models.base_model import BaseModel
+                        obj = BaseModel(**value)
+                    else:
+                        raise ValueError("Class name not found")
                     FileStorage.__objects[key] = obj
         except FileNotFoundError:
             pass
