@@ -19,10 +19,14 @@ class FileStorage:
     def reload(self):
         try:
             with open(self.__file_path, "r") as file:
-                loaded_objs = json.load(file)
-                self.__objects = {}
-                for key, value in loaded_objs.items():
-                    class_name = key.split('.')
-                    self.__objects[key] = globals()[class_name](**value)
+                file_content = file.read()
+                print(file_content)
+                if file_content:
+                    self.__objects = json.loads(file_content)
+                    for key, value in self.__objects.items():
+                        class_name , obj_id = key.split('.')
+                        self.__objects[key] = globals()[class_name](**value)
+                else:
+                    self.__objects = {}
         except FileNotFoundError:
             pass
