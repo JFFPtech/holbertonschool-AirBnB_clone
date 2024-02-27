@@ -19,7 +19,10 @@ class BaseModel:
             storage.new(self)
 
     def __str__(self):
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+        return "[{}] ({}) {}".format(
+            self.__class__.__name__,
+            self.id,
+            self.__dict__)
 
     def save(self):
         self.updated_at = datetime.now()
@@ -30,4 +33,6 @@ class BaseModel:
         obj_dict['__class__'] = self.__class__.__name__
         obj_dict['created_at'] = self.created_at.isoformat()
         obj_dict['updated_at'] = self.updated_at.isoformat()
+        if hasattr(self, 'first_name'):
+            obj_dict['first_name'] = self.first_name
         return obj_dict
