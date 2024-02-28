@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+"""This module stores a file""""
+
 import json
 from models.base_model import BaseModel
 from models.user import User
@@ -9,7 +12,8 @@ from models.amenity import Amenity
 
 
 class FileStorage:
-    """This class represents a file storage system for objects in the AirBnB clone project."""
+    """This class represents a file storage system
+    for objects in the AirBnB clone project."""
 
     __file_path = "file.json"
     __objects = {}
@@ -24,7 +28,8 @@ class FileStorage:
         FileStorage.__objects[key] = obj
 
     def save(self):
-        """Serializes and saves the objects in the __objects dictionary to a JSON file"""
+        """Serializes and saves the objects in the __objects
+        dictionary to a JSON file"""
         serialized_objects = {}
         for key, value in FileStorage.__objects.items():
             serialized_objects[key] = value.to_dict()
