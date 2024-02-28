@@ -52,3 +52,31 @@ Note: ID doesn't apply to the create command.
 
 ### Examples:
 #### For Help:
+
+(hbnb)help create
+create a new instace of a class
+(hbnb)
+
+#### For standard commands:
+
+(hbnb)create User
+993e570d-9b4e-449c-84b3-085ab454d3ce
+(hbnb)
+
+Create a new User
+
+(hbnb)create BaseModel
+d711be23-73d9-4fbd-92f5-fe9ec7044d6d
+(hbnb)show BaseModel d711be23-73d9-4fbd-92f5-fe9ec7044d6d
+[BaseModel] (d711be23-73d9-4fbd-92f5-fe9ec7044d6d) {'id': 'd711be23-73d9-4fbd-92f5-fe9ec7044d6d', 'created_at': '2019-07-04T02:20:53.149558', 'updated_at': '2019-07-04T02:20:53.149791'}
+(hbnb)
+
+Create a new BaseModel and show the objects of the instance.
+
+(hbnb)destroy BaseModel d711be23-73d9-4fbd-92f5-fe9ec7044d6d
+['BaseModel', 'd711be23-73d9-4fbd-92f5-fe9ec7044d6d']
+(hbnb)
+
+Pretty self explanatory. Destroy the objects.
+
+
