@@ -1,79 +1,65 @@
 #!/usr/bin/python3
-"""Module test_place"""
+"""Unittests for base model class"""
+
+
 import unittest
 from models.place import Place
 from models.base_model import BaseModel
+from datetime import datetime
+from uuid import UUID
+from models import storage
 
 
-class TestPlace(unittest.TestCase):
-    """Test for the Place class"""
+class TestsBaseModel(unittest.TestCase):
+    """ Unittests for base model class """
 
-    def setup(self):
-        """Set up"""
-        self.p1 = Place()
+    obj = Place()
 
-    def test_city_id(self):
-        """Testing Place city_id"""
-        self.assertEqual(self.place.city_id, "")
+    def setUp(self):
+        """set initial"""
+        city_id = ""
+        user_id= ""
+        name = ""
+        description = ""
+        number_rooms = 0
+        number_bathrooms = 0
+        max_guest = 0
+        price_by_night = 0
+        latitude = 0.0
+        longitude = 0.0
+        amenity_ids = []
 
-    def test_user_id(self):
-        """Testing Place user_id"""
-        self.assertEqual(self.place.user_id, "")
+    def test_normal_cases_place(self):
+        """normal cases"""
+        my_object = Place()
+        my_object.name = "Westeros"
+        my_object.my_number = 29
+        my_object.save()
+        my_object_dict = my_object.to_dict()
+        self.assertEqual(my_object.name, "Westeros")
+        self.assertEqual(my_object.my_number, 29)
+        self.assertEqual(my_object.__class__.__name__, "Place")
+        self.assertEqual(isinstance(my_object.created_at, datetime), True)
+        self.assertEqual(isinstance(my_object.updated_at, datetime), True)
+        self.assertEqual(type(my_object.__dict__), dict)
 
-    def test_name(self):
-        """Testing Place name"""
-        self.assertEqual(self.place.name, "")
+    def test_subclass(self):
+        """test if class is subclass"""
+        self.assertEqual(issubclass(Place, BaseModel), True)
 
-    def test_description(self):
-        """Testing Place description"""
-        self.assertEqual(self.place.description, "")
-
-    def test_number_rooms(self):
-        """Testing Place number_rooms"""
-        self.assertEqual(self.place.number_rooms, 0)
-
-    def test_number_bathrooms(self):
-        """Testing Place number_bathrooms"""
-        self.assertEqual(self.place.number_bathrooms, 0)
-
-    def test_max_guest(self):
-        """Testing Place max_guest"""
-        self.assertEqual(self.place.max_guest, 0)
-
-    def test_price_by_night(self):
-        """Testing Place price_by_night"""
-        self.assertEqual(self.place.price_by_night, 0)
-
-    def test_latitude(self):
-        """Testing Place latitude"""
-        self.assertEqual(self.place.latitude, 0.0)
-
-    def test_longitude(self):
-        """Testing Place longitude"""
-        self.assertEqual(self.place.longitude, 0.0)
-
-    def test_amenity_ids(self):
-        """Testing Place amenity_ids"""
-        self.assertEqual(self.place.amenity_ids, [])
-
-    def test_inheritance(self):
-        """Testing Place inheritance"""
-        self.assertIsInstance(self.place, BaseModel)
-
-    def test_attributes(self):
-        """Testing Place attributes"""
-        self.assertTrue(hasattr(self.place, "city_id"))
-        self.assertTrue(hasattr(self.place, "user_id"))
-        self.assertTrue(hasattr(self.place, "name"))
-        self.assertTrue(hasattr(self.place, "description"))
-        self.assertTrue(hasattr(self.place, "number_rooms"))
-        self.assertTrue(hasattr(self.place, "number_bathrooms"))
-        self.assertTrue(hasattr(self.place, "max_guest"))
-        self.assertTrue(hasattr(self.place, "price_by_night"))
-        self.assertTrue(hasattr(self.place, "latitude"))
-        self.assertTrue(hasattr(self.place, "longitude"))
-        self.assertTrue(hasattr(self.place, "amenity_ids"))
-
+    def test_type(self):
+        """test type of object"""
+        self.assertEqual(type(self.obj.city_id), str)
+        self.assertEqual(type(self.obj.user_id), str)
+        self.assertEqual(type(self.obj.name), str)
+        self.assertEqual(type(self.obj.description), str)
+        self.assertEqual(type(self.obj.number_rooms), int)
+        self.assertEqual(type(self.obj.number_bathrooms), int)
+        self.assertEqual(type(self.obj.max_guest), int)
+        self.assertEqual(type(self.obj.price_by_night), int)
+        self.assertEqual(type(self.obj.latitude), float)
+        self.assertEqual(type(self.obj.longitude), float)
+        self.assertEqual(type(self.obj.amenity_ids), list)
 
 if __name__ == "__main__":
     unittest.main()
