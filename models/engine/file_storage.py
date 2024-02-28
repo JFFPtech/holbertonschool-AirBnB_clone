@@ -1,14 +1,14 @@
 import json
+from models.base_model import BaseModel
+from models.user import User
 
 class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
     def all(self):
-        all_objects = {}
-        for key, value in FileStorage.__objects.items():
-            all_objects[key] = value
-        return self.__objects
+        """Returns the dictionary __objects"""
+        return FileStorage.__objects
 
     def new(self, obj):
         key = "{}.{}".format(obj.__class__.__name__, obj.id)
@@ -23,18 +23,11 @@ class FileStorage:
 
     def reload(self):
         try:
-            with open(FileStorage.__file_path, 'r') as f:
-                try:
-                    data = json.load(f)
-                    for key, value in data.items():
-                        class_name, obj_id = key.split('.')
-                        if class_name == "BaseModel":
-                            from models.base_model import BaseModel
-                            obj = BaseModel(**value)
-                        else:
-                            raise ValueError("Class name not found")
-                        FileStorage.__objects[key] = obj
-                except json.JSONDecodeError:
-                    print("** class does not exist **")
+            with open(FileStorage.__file_path, 'r') as file:
+                deserialized_objects = json.load(file)
+                for key, value in deserialized_objects.items():
+                    class_name = value['__class__']
+                    del value['__class__']
+                    self.new(eval(class_name)(**value))
         except FileNotFoundError:
             pass
