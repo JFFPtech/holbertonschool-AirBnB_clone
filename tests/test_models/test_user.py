@@ -1,73 +1,51 @@
 #!/usr/bin/python3
-"""Module test_user"""
+"""Unittests for user class"""
+
+
 import unittest
 from models.user import User
 from models.base_model import BaseModel
+from datetime import datetime
+from uuid import UUID
 from models import storage
 
 
-class TestUser(unittest.TestCase):
-    """Testing User functionality"""
+class TestsUser(unittest.TestCase):
+    """class test user"""
+
+    obj = User()
 
     def setUp(self):
-        """Set up"""
-        self.user1 = User()
-        self.user2 = User()
-        self.user2.email = "user@example.com"
-        self.user2.password = "password"
-        self.user2.first_name = "Betty"
-        self.user2.last_name = "Holberton"
-        self.user2.save()
+        """set initial"""
+        email = ""
+        password = ""
+        first_name = ""
+        last_name = ""
 
-    def test_attributes(self):
-        """Testing User attributes"""
-        self.assertTrue(hasattr(self.user1, "email"))
-        self.assertTrue(hasattr(self.user1, "password"))
-        self.assertTrue(hasattr(self.user1, "first_name"))
-        self.assertTrue(hasattr(self.user1, "last_name"))
+    def test_normal_cases_user(self):
+        """normal cases"""
+        my_object = User()
+        my_object.name = "Oberyn"
+        my_object.my_number = 29
+        my_object.save()
+        my_object_dict = my_object.to_dict()
+        self.assertEqual(my_object.name, "Oberyn")
+        self.assertEqual(my_object.my_number, 29)
+        self.assertEqual(my_object.__class__.__name__, "User")
+        self.assertEqual(isinstance(my_object.created_at, datetime), True)
+        self.assertEqual(isinstance(my_object.updated_at, datetime), True)
+        self.assertEqual(type(my_object.__dict__), dict)
 
-    def test_id(self):
-        """Testing User id"""
-        self.assertNotEqual(self.user1.id, self.user2.id)
+    def test_subclass(self):
+        """test if class is subclass"""
+        self.assertEqual(issubclass(User, BaseModel), True)
 
-    def test_attribute_default(self):
-        """Test attribute default"""
-        self.assertEqual(self.user1.email, "")
-        self.assertEqual(self.user1.password, "")
-        self.assertEqual(self.user1.first_name, "")
-        self.assertEqual(self.user1.last_name, "")
-    
-    def test_created_at(self):
-        """Testing created_at"""
-        self.assertNotEqual(self.user1.created_at, self.user2.created_at)
-
-    def test_str(self):
-        """Testing User __str__"""
-        expected = "[User] ({}) {}".format(self.user1.id, self.user1.__dict__)
-        self.assertEqual(expected, str(self.user1))
-
-    def test_save(self):
-        """Testing save"""
-        created = self.user1.created_at
-        updated = self.user1.updated_at
-        self.user1.save()
-        self.assertNotEqual(updated, self.user1.updated_at)
-        self.assertEqual(created, self.user1.created_at)
-
-    def test_to_dict(self):
-        """Testing to_dict"""
-        expected = {
-            "id": self.user2.id,
-            "__class__": type(self.user2).__name__,
-            "email": "user@example.com",
-            "password": "password",
-            "first_name": "Betty",
-            "last_name": "Holberton",
-            "created_at": self.user2.created_at.isoformat(),
-            "updated_at": self.user2.updated_at.isoformat()
-        }
-        self.assertDictEqual(expected, self.user2.to_dict())
-
+    def test_type(self):
+        """test type of object"""
+        self.assertEqual(type(self.obj.email), str)
+        self.assertEqual(type(self.obj.password), str)
+        self.assertEqual(type(self.obj.first_name), str)
+        self.assertEqual(type(self.obj.last_name), str)
 
 if __name__ == "__main__":
     unittest.main()

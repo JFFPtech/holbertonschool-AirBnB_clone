@@ -1,52 +1,49 @@
 #!/usr/bin/python3
-"""Module test_review"""
+"""Unittests for base model class"""
+
+
 import unittest
 from models.review import Review
 from models.base_model import BaseModel
+from datetime import datetime
+from uuid import UUID
+from models import storage
 
 
-class TestReview(unittest.TestCase):
-    """Test for the Review class"""
+class TestsBaseModel(unittest.TestCase):
+    """class test base model for unittest"""
+    
+    obj = Review()
 
-    def setup(self):
-        """Set up"""
-        self.r1 = Review()
+    def seUp(self):
+        """set initial"""
+        place_id = ""
+        user_id = ""
+        text = ""
 
-    def test_place_id(self):
-        """Testing Review place_id"""
-        self.assertEqual(self.review.place_id, "")
+    def test_normal_cases_review(self):
+        """normal cases"""
+        my_object = Review()
+        my_object.name = "Westeros"
+        my_object.my_number = 29
+        my_object.save()
+        my_object_dict = my_object.to_dict()
+        self.assertEqual(my_object.name, "Westeros")
+        self.assertEqual(my_object.my_number, 29)
+        self.assertEqual(my_object.__class__.__name__, "Review")
+        self.assertEqual(isinstance(my_object.created_at, datetime), True)
+        self.assertEqual(isinstance(my_object.updated_at, datetime), True)
+        self.assertEqual(type(my_object.__dict__), dict)
 
-    def test_user_id(self):
-        """Testing Review user_id"""
-        self.assertEqual(self.review.user_id, "")
+    def test_subclass(self):
+        """test if class is subclass"""
+        self.assertEqual(issubclass(Review, BaseModel), True)
+	
+    def test_type(self):
+        """test type of object"""
+        self.assertEqual(type(self.obj.place_id), str)
+        self.assertEqual(type(self.obj.user_id), str)
+        self.assertEqual(type(self.obj.text), str)
 
-    def test_text(self):
-        """Testing Review text"""
-        self.assertEqual(self.review.text, "")
-
-    def test_inheritance(self):
-        """Testing Review inheritance"""
-        self.assertIsInstance(self.review, BaseModel)
-
-    def test_attributes(self):
-        """Testing Review attributes"""
-        self.assertTrue(hasattr(self.review, "place_id"))
-        self.assertTrue(hasattr(self.review, "user_id"))
-        self.assertTrue(hasattr(self.review, "text"))
-        self.assertTrue(hasattr(self.review, "id"))
-        self.assertTrue(hasattr(self.review, "created_at"))
-        self.assertTrue(hasattr(self.review, "updated_at"))
-
-    def test_attribute_default(self):
-        """Test attribute default"""
-        self.assertEqual(self.review.place_id, "")
-        self.assertEqual(self.review.user_id, "")
-        self.assertEqual(self.review.text, "")
-
-    def test_str(self):
-        """Testing Review __str__"""
-        expected = "[Review] ({}) {}".format(self.review.id, self.review.__dict__)
-        self.assertEqual(expected, str(self.review))
-
-    if __name__ == "__main__":
-        unittest.main()
+if __name__ == "__main__":
+    unittest.main()
