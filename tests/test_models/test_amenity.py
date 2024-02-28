@@ -1,42 +1,45 @@
 #!/usr/bin/python3
-"""Module test_amenity"""
+"""Unittests for base model class"""
+
+
 import unittest
 from models.amenity import Amenity
 from models.base_model import BaseModel
+from datetime import datetime
+from uuid import UUID
+from models import storage
 
 
-class TestAmenity(unittest.TestCase):
-    """Test for the Amenity class"""
+class TestsAmenity(unittest.TestCase):
 
-    def setup(self):
-        """Set up"""
-        self.a1 = Amenity()
+    obj = Amenity()
 
-    def test_name(self):
-        """Testing Amenity name"""
-        self.assertEqual(self.amenity.name, "")
+    def setUp(self):
+        """Set up initial"""
+        name = ""
 
-    def test_inheritance(self):
-        """Testing Amenity inheritance"""
-        self.assertIsInstance(self.amenity, BaseModel)
+    def test_normal_cases_amenity(self):
+        """Normal cases"""
+        my_object = Amenity()
+        my_object.name = "Westeros"
+        my_object.my_number = 29
+        my_object.save()
+        my_object_dict = my_object.to_dict()
+        self.assertEqual(my_object.name, "Westeros")
+        self.assertEqual(my_object.my_number, 29)
+        self.assertEqual(my_object.__class__.__name__, "Amenity")
+        self.assertEqual(isinstance(my_object.created_at, datetime), True)
+        self.assertEqual(isinstance(my_object.updated_at, datetime), True)
+        self.assertEqual(type(my_object.__dict__), dict)
 
-    def test_attributes(self):
-        """Testing Amenity attributes"""
-        self.assertTrue(hasattr(self.amenity, "name"))
-        self.assertTrue(hasattr(self.amenity, "id"))
-        self.assertTrue(hasattr(self.amenity, "created_at"))
-        self.assertTrue(hasattr(self.amenity, "updated_at"))
+    def test_subclass(self):
+        """Test if class is subclass"""
+        self.assertEqual(issubclass(Amenity, BaseModel), True)
 
-    def test_attribute_default(self):
-        """Test attribute default"""
-        self.assertEqual(self.amenity.name, "")
+    def test_type(self):
+        """Test type of object"""
+        obj = Amenity()
+        self.assertEqual(type(self.obj.name), str)
 
-    def test_str(self):
-        """Testing Amenity __str__"""
-        expected = "[Amenity] ({}) {}"
-        .format(self.amenity.id, self.amenity.__dict__)
-
-        self.assertEqual(expected, str(self.amenity))
-
-    if __name__ == "__main__":
-        unittest.main()
+if __name__ == "__main__":
+    unittest.main()
