@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """This module contains the BaseModel class for the AirBnB clone"""
-from uuid import uuid4
+import uuid
 from datetime import datetime
 import models
 
@@ -9,17 +9,18 @@ class BaseModel:
     """Base class for AirBnB clone"""
     def __init__(self, *args, **kwargs):
         """Initialization of the base model"""
-        if kwargs:
-            for keys, value in kwargs.items():
-                if keys != "__class__":
-                    if keys == "created_at" or keys == "updated_at":
-                        value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-                    setattr(self, keys, value)
-        else:
-            self.id = str(uuid4())
+        if not kwargs:
+            self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             models.storage.new(self)
+        else:
+            for k, v in kwargs.items():
+                if k == "created_at" or k == "updated_at":
+                    dataTime = "%Y-%m-%dT%H:%M:%S.%f"
+                    v = datetime.strptime(v, dataTime)
+                if k != "__class__":
+                    setattr(self, k, v)
 
     def __str__(self):
         """
@@ -48,8 +49,9 @@ class BaseModel:
         Returns:
             A dictionary representation of the BaseModel instance.
         """
-        obj_dict = self.__dict__.copy()
+        obj_dict = dict(self.__dict__)
         obj_dict['__class__'] = self.__class__.__name__
-        obj_dict['created_at'] = self.created_at.isoformat()
-        obj_dict['updated_at'] = self.updated_at.isoformat()
+        formatTime = "%Y-%m-%dT%H:%M:%S.%f"
+        obj_dict['created_at'] = self.created_at.strftime(formatTime)
+        obj_dict['updated_at'] = self.updated_at.strftime(formatTime)
         return obj_dict
