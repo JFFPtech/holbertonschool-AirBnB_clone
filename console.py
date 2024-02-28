@@ -14,7 +14,6 @@ from models.review import Review
 from models import ClassList
 
 
-
 class HBNBCommand(cmd.Cmd):
     """Console class for the command interpreter"""
     prompt = "(hbnb) "
@@ -34,7 +33,7 @@ class HBNBCommand(cmd.Cmd):
             newInstance = eval(token[0])()
             newInstance.save()
             print(newInstance.id)
-        except:
+        except Exception:
             print("** class doesn't exist **")
 
     def do_show(self, args):
@@ -49,7 +48,7 @@ class HBNBCommand(cmd.Cmd):
             return
         try:
             eval(token[0])
-        except:
+        except Exception:
             print("** class doesn't exist **")
 
         objDict = storage.all()
@@ -68,25 +67,25 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             print("** class name missing **")
             return
-        if token[1] == 0:
+        if len(token) == 1:
             print("** instance id missing **")
+            return
 
         try:
             eval(token[0])
-        except:
+        except Exception:
             print("** class doesn't exist **")
         objDict = storage.all()
         keyId = token[0] + "." + token[1]
 
         try:
             del objDict[keyId]
-        except:
+        except KeyError:
             print("** no instance found **")
         storage.save()
 
     def do_all(self, arg):
-        """ Prints string represention of all instances of a given class """
-
+        """Prints string represention of all instances of a given class"""
         if not arg:
             print("** class name missing **")
             return
@@ -106,8 +105,7 @@ class HBNBCommand(cmd.Cmd):
             print(newList)
 
     def do_update(self, args):
-        """ Updates an instance based on the class name and id """
-
+        """Updates an instance based on the class name and id"""
         if not args:
             print("** class name missing **")
             return
@@ -135,12 +133,13 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_EOF(self, args):
-        """end_of_file"""
+        """End of file"""
         return True
 
     def do_quit(self, args):
         """Quit command to exit the program"""
         return True
+
 
 if __name__ == "__main__":
     console = HBNBCommand()
