@@ -5,13 +5,14 @@ import models
 from models import base_model
 from datetime import datetime
 
+
 class User(base_model.BaseModel):
     """ User class """
     email = ""
     password = ""
     first_name = ""
     last_name = ""
-    
+
     def __init__(self, *args, **kwargs):
         """ Constructor """
         super().__init__(*args, **kwargs)

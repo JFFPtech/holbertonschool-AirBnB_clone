@@ -5,6 +5,7 @@ from models.base_model import BaseModel
 from datetime import datetime
 import models
 
+
 class Place(BaseModel):
     """Place class"""
     city_id = ""
@@ -27,12 +28,12 @@ class Place(BaseModel):
     def __str__(self):
         """Place string representation"""
         return "[Place] ({}) {}".format(self.id, self.__dict__)
-    
+
     def save(self):
         """Save method"""
         self.updated_at = datetime.now()
         models.storage.save()
-    
+
     def to_dict(self):
         """To dict method"""
         new_dict = self.__dict__.copy()
