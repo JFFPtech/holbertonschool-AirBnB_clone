@@ -45,5 +45,5 @@ class FileStorage:
         if os.path.isfile(FileStorage.__file_path):
             with open(FileStorage.__file_path, 'r') as file:
                 deserialized_objects = json.load(file)
-            for key, value in deserialized_objects.items():
-                FileStorage.__objects[key] = my_dict[value['__class__']](**value)
+            for k, v in deserialized_objects.items():
+                FileStorage.__objects[k] = my_dict[v['__class__']](**v)
