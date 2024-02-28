@@ -1,46 +1,40 @@
 #!/usr/bin/python3
+""" This module contains the entry point of the command interpreter """
 
 import cmd
 from models import storage
-from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 from models.user import User
+from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
-from models.place import Place
 from models.review import Review
 from models import ClassList
 
 
+
 class HBNBCommand(cmd.Cmd):
-    """This is the console for the AirBnB project"""
+    """Console class for the command interpreter"""
     prompt = "(hbnb) "
-
-    def do_quit(self, arg):
-        """Quit command to exit the program"""
-        return True
-
-    def do_EOF(self, arg):
-        """EOF command to exit the program"""
-        return True
 
     def emptyline(self):
         """Do nothing if an empty line is entered"""
         pass
 
-    def do_create(self, arg):
-        """Creates a new instance of BaseModel and prints the id"""
-        if len(arg) == 0:
+    def do_create(self, args):
+        """creates a new instance"""
+        if len(args) == 0:
             print("** class name missing **")
             return
-        tokens = arg.split()
+        token = args.split()
 
         try:
-            new_instance = eval(tokens[0])()
-            new_instance.save()
-            print(new_instance.id)
-        except Exception:
+            newInstance = eval(token[0])()
+            newInstance.save()
+            print(newInstance.id)
+        except:
             print("** class doesn't exist **")
 
     def do_show(self, args):
@@ -55,7 +49,7 @@ class HBNBCommand(cmd.Cmd):
             return
         try:
             eval(token[0])
-        except Exception:
+        except:
             print("** class doesn't exist **")
 
         objDict = storage.all()
@@ -79,14 +73,14 @@ class HBNBCommand(cmd.Cmd):
 
         try:
             eval(token[0])
-        except Exception:
+        except:
             print("** class doesn't exist **")
         objDict = storage.all()
         keyId = token[0] + "." + token[1]
 
         try:
             del objDict[keyId]
-        except Exception:
+        except:
             print("** no instance found **")
         storage.save()
 
@@ -140,6 +134,13 @@ class HBNBCommand(cmd.Cmd):
                     return
             print("** no instance found **")
 
+    def do_EOF(self, args):
+        """end_of_file"""
+        return True
+
+    def do_quit(self, args):
+        """Quit command to exit the program"""
+        return True
 
 if __name__ == "__main__":
     console = HBNBCommand()
