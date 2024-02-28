@@ -10,6 +10,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 
+
 class HBNBCommand(cmd.Cmd):
     """This is the console for the AirBnB project"""
     prompt = '(hbnb) '
@@ -31,8 +32,8 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             print("** class name missing **")
             return
-        elif arg not in ["BaseModel", "User", "State", "City", "Amenity",
-                          "Place", "Review"]:
+        elif arg not in ["BaseModel", "User", "State", "City",
+                         "Amenity",  "Place", "Review"]:
             print("** class doesn't exist **")
         else:
             new_instance = eval(arg)()
@@ -40,7 +41,8 @@ class HBNBCommand(cmd.Cmd):
             print(new_instance.id)
 
     def do_show(self, arg):
-        """Prints the string representation of an instance based on the class name and id"""
+        """Prints the string representation of an instance
+        based on the class name and id"""
         args = arg.split()
         if not args:
             print("** class name missing **")
@@ -55,14 +57,14 @@ class HBNBCommand(cmd.Cmd):
                 print(storage.all()[key])
             else:
                 print("** no instance found **")
-                 
+
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id"""
         args = arg.split()
         if not args:
             print("** class name missing **")
         elif args[0] not in ["BaseModel", "User", "State", "City",
-                              "Amenity", "Place", "Review"]:
+                             "Amenity", "Place", "Review"]:
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
@@ -73,9 +75,10 @@ class HBNBCommand(cmd.Cmd):
                 storage.save()
             else:
                 print("** no instance found **")
-                             
+
     def do_all(self, arg):
-        """Prints all string representation of all instances based or not on the class name"""
+        """Prints all string representation of all instances
+        based or not on the class name"""
         args = arg.split()
         if not args:
             print([str(value) for value in storage.all().values()])
@@ -84,7 +87,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
         else:
             print([str(value) for key, value in storage.all().items()
-                    if args[0] in key])
+                   if args[0] in key])
 
     def do_update(self, arg):
         """Updates an instance based on the class name and id"""
@@ -111,6 +114,7 @@ class HBNBCommand(cmd.Cmd):
                 storage.all()[key].save()
             else:
                 print("** no instance found **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
