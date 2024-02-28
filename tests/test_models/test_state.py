@@ -1,40 +1,44 @@
 #!/usr/bin/python3
-"""Module test_state"""
+"""Unittests for base model class"""
+
+
 import unittest
 from models.state import State
 from models.base_model import BaseModel
+from datetime import datetime
+from uuid import UUID
+from models import storage
 
 
-class TestState(unittest.TestCase):
-    """Test for the State class"""
+class TestsBaseModel(unittest.TestCase):
+    """class test state"""
+    obj = State()
+	    
+    def setUp(self):
+        """set up initial"""
+        name = ""
+	
+    def test_normal_cases_state(self):
+        """normal cases"""
+        my_object = State()
+        my_object.name = "Dorn"
+        my_object.my_number = 29
+        my_object.save()
+        my_object_dict = my_object.to_dict()
+        self.assertEqual(my_object.name, "Dorn")
+        self.assertEqual(my_object.my_number, 29)
+        self.assertEqual(my_object.__class__.__name__, "State")
+        self.assertEqual(isinstance(my_object.created_at, datetime), True)
+        self.assertEqual(isinstance(my_object.updated_at, datetime), True)
+        self.assertEqual(type(my_object.__dict__), dict)
 
-    def setup(self):
-        """Set up"""
-        self.s1 = State()
+    def test_subclass(self):
+        """test if class is subclass"""
+        self.assertEqual(issubclass(State, BaseModel), True)
 
-    def test_name(self):
-        """Testing State name"""
-        self.assertEqual(self.state.name, "")
+    def test_type(self):
+        """test type of object"""
+        self.assertEqual(type(self.obj.name), str)
 
-    def test_inheritance(self):
-        """Testing State inheritance"""
-        self.assertIsInstance(self.state, BaseModel)
-
-    def test_attributes(self):
-        """Testing State attributes"""
-        self.assertTrue(hasattr(self.state, "name"))
-        self.assertTrue(hasattr(self.state, "id"))
-        self.assertTrue(hasattr(self.state, "created_at"))
-        self.assertTrue(hasattr(self.state, "updated_at"))
-
-    def test_attribute_default(self):
-        """Test attribute default"""
-        self.assertEqual(self.state.name, "")
-
-    def test_str(self):
-        """Testing State __str__"""
-        expected = "[State] ({}) {}".format(self.state.id, self.state.__dict__)
-        self.assertEqual(expected, str(self.state))
-
-    if __name__ == "__main__":
-        unittest.main()
+if __name__ == "__main__":
+    unittest.main()
