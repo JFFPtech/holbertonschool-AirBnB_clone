@@ -1,7 +1,8 @@
 #!/usr/bin/python3
-"""This module stores a file""""
+"""This module stores a file"""
 
 import json
+import os.path
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -24,26 +25,25 @@ class FileStorage:
 
     def new(self, obj):
         """Adds a new object to the __objects dictionary"""
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        FileStorage.__objects[key] = obj
+        FileStorage.__objects[obj.__class__.__name__ + '.' + obj.id] = obj
 
     def save(self):
         """Serializes and saves the objects in the __objects
         dictionary to a JSON file"""
         serialized_objects = {}
         for key, value in FileStorage.__objects.items():
-            serialized_objects[key] = value.to_dict()
+            if value:
+                serialized_objects[key] = value.to_dict()
         with open(FileStorage.__file_path, 'w') as file:
             json.dump(serialized_objects, file)
 
     def reload(self):
         """Deserializes and reloads the objects from the JSON file"""
-        try:
+        my_dict = {'BaseModel': BaseModel, 'User': User, 'State': State,
+                   'City': City, 'Place': Place, 'Review': Review,
+                   'Amenity': Amenity}
+        if os.path.isfile(FileStorage.__file_path):
             with open(FileStorage.__file_path, 'r') as file:
                 deserialized_objects = json.load(file)
-                for key, value in deserialized_objects.items():
-                    class_name = value['__class__']
-                    del value['__class__']
-                    self.new(eval(class_name)(**value))
-        except FileNotFoundError:
-            pass
+            for key, value in deserialized_objects.items():
+                FileStorage.__objects[key] = my_dict[value['__class__']](**value)
